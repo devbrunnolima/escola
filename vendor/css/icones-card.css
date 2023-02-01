@@ -1,0 +1,23 @@
+
+.icone-card {
+	font-size: 5rem;
+	
+}
+
+.icone-card-detalhes {
+	font-size: 4rem;
+	
+}
+
+
+.card-color-green {
+	background-image: linear-gradient(to right, #32CD32, #008000, #006400);
+}
+
+.card-color-blue {
+	background-image: linear-gradient(to right, #0000FF, #0000CD, #00008B);
+}
+
+.card-color-orange {
+	background-image: linear-gradient(to right, #FFA500, #FF8C00, #FF4500);
+}

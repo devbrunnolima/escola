@@ -1,0 +1,31 @@
+.menu  {
+/*	background: linear-gradient(135deg, #031a3c  0%, #528a99 100%);*/
+	/*background: linear-gradient(79deg, rgba(0,87,147,1) 51%, rgba(156,156,156,1) 93%);*/
+	background: linear-gradient(79deg, rgba(0,57,98,1) 62%, rgba(20,72,122,1) 79%);
+	color: #FFF;
+}
+
+a.nav-link {
+	
+	color: #FFF;
+	text-decoration: none;
+}
+
+a.nav-link:hover {
+	color: #FFF;
+	text-decoration: none;
+	border-bottom: 1px solid #FFF;
+	text-decoration: none;
+	transition-timing-function: ease-in-out;
+}
+
+
+#header {
+	margin-top: 0;
+/*	background: linear-gradient(135deg, #031a3c  0%, #528a99 100%);*/
+    /*background: linear-gradient(79deg, rgba(0,87,147,1) 51%, rgba(156,156,156,1) 93%);*/
+    background: linear-gradient(79deg, rgba(0,57,98,1) 62%, rgba(20,72,122,1) 79%);
+}
+
+
+

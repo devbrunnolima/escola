@@ -1,0 +1,12 @@
+.cartao{
+    /*background: linear-gradient(135deg, #0a2c51  0%, #3b6f7d 100%);*/
+    /*background: #1f1f1f;*/
+    background: #d4d4d4;
+    border: 2px solid #dddddd;
+    
+}
+
+.cartao a{
+        color: #004475;
+        text-decoration: none;
+}

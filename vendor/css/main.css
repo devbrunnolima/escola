@@ -1,0 +1,26 @@
+/*main{
+	background-color: #dddddd ;
+}
+
+body{
+	background-color: #dddddd ;
+}*/
+
+.main.animate .navbar-side {
+	width: 60px;
+	-webkit-transition: 0.2s all ease-in-out;
+	transition: 0.2s all ease-in-out;
+  }
+  
+  .main.animate .navbar-side .link-text {
+	display: none;
+  }
+  
+  .main.animate .navbar-side .myCaret {
+	display: none;
+  }
+  
+  .main.animate .content {
+	margin-left: 60px;
+  }
+  

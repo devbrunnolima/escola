@@ -1,0 +1,36 @@
+/*.btn-secondary {
+    color: #fff !important;
+    background-color: #305a71 !important;
+    border-color: #508897;
+ }
+
+.btn-secondary:hover {
+    color: #fff !important;
+    background-color: #508897 !important;
+    border-color: #508897;
+}*/
+
+/*.btn-outline-dark {
+    color: #002c53 !important;
+    background-color:  transparent;
+    background-image: none;
+    border-color: #002c53;
+ }
+
+ .btn-dark:hover {
+    color: #fff !important;
+    background-color: #002c53 !important;
+    border-color: #002c53;
+}*/
+
+.botao {
+    color: #fff !important;
+    background-color: #305a71 !important;
+    border-color: #508897;
+ }
+
+.botao:hover {
+    color: #fff !important;
+    background-color: #508897 !important;
+    border-color: #508897;
+}

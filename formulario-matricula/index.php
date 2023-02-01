@@ -1,0 +1,765 @@
+<?php 
+require_once('conexao.php');
+$dt_today = date('d/m/Y H:i:s' );
+
+function idadde($dt_nascimento){
+    $idade = floor((((($dt_today - $dt_nascimento) / 60) / 60) / 24) / 365.25);
+};
+
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario</title>
+    <!--styles internos -->
+    <link rel="stylesheet" href="../vendor/css/style.css">
+    <link rel="stylesheet" href="../vendor/css/navbar.css">
+    <!--styles externos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <!-- Scripts -->
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<!-- CSS only -->
+
+
+    <!-- Busca CEP -->
+            <script>
+    
+    function limpa_formulário_cep() {
+            //Limpa valores do formulário de cep.
+            document.getElementById('rua').value=("");
+            document.getElementById('bairro').value=("");
+            document.getElementById('cidade').value=("");
+    }
+
+    function meu_callback(conteudo) {
+        if (!("erro" in conteudo)) {
+            //Atualiza os campos com os valores.
+            document.getElementById('rua').value=(conteudo.logradouro);
+            document.getElementById('bairro').value=(conteudo.bairro);
+            document.getElementById('cidade').value=(conteudo.localidade);
+        } //end if.
+        else {
+            //CEP não Encontrado.
+            limpa_formulário_cep();
+            alert("CEP não encontrado.");
+        }
+    }
+
+    
+    function calcularIdade(dt_nascimento){
+
+
+        
+        let date = new Date();
+
+        let data_nasc = new Date(dt_nascimento);
+        
+        const Y = (data_nasc.getDate() + 1) - (data_nasc.getDate());
+        // const m = data_nasc.getMonth();
+        // const m1 = date.getMonth();
+        const age = (date.getFullYear() ) - (data_nasc.getFullYear() );
+        const m = (date.getMonth()) - (data_nasc.getMonth() );
+        console.log(age);
+        console.log(m);
+
+        console.log(date);
+        console.log(data_nasc);
+        console.log(m);
+
+
+        if(data_nasc >= date){
+            alert('Data Inválida');
+        }
+       
+        
+        if (m < 0 || (m === 0 && date.getDate() < data_nasc.getDate())) {
+        age--;
+        }
+        
+        return age;
+        
+        // let date_new = ((date.getDate() )) + "/" + ((date.getMonth() + 1)) + "/" + date.getFullYear(); 
+
+
+
+        
+    }
+
+    
+        
+    function pesquisacep(valor) {
+
+        //Nova variável "cep" somente com dígitos.
+        var cep = valor.replace(/\D/g, '');
+
+        //Verifica se campo cep possui valor informado.
+        if (cep != "") {
+
+            //Expressão regular para validar o CEP.
+            var validacep = /^[0-9]{8}$/;
+
+            //Valida o formato do CEP.
+            if(validacep.test(cep)) {
+
+                //Preenche os campos com "..." enquanto consulta webservice.
+                document.getElementById('rua').value="...";
+                document.getElementById('bairro').value="...";
+                document.getElementById('cidade').value="...";
+
+                //Cria um elemento javascript.
+                var script = document.createElement('script');
+
+                //Sincroniza com o callback.
+                script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+
+                //Insere script no documento e carrega o conteúdo.
+                document.body.appendChild(script);
+
+            } //end if.
+            else {
+                //cep é inválido.
+                limpa_formulário_cep();
+                alert("Formato de CEP inválido.");
+            }
+        } //end if.
+        else {
+            //cep sem valor, limpa formulário.
+            limpa_formulário_cep();
+        }
+    };
+
+    </script>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background: radial-gradient(circle, rgba(240,240,240,1) 35%,rgb(230,230,230) 95%);
+
+            display: flex;
+            justify-content:center;
+
+
+
+        }
+        .color-radio{
+            color: #000;
+        }
+        label{
+            color: #000;
+        }
+
+        .bg-form{
+            transform: translate( 0,-4%) ;
+            top:0;
+            padding: 7px;
+            width:  60vw;
+            background: rgb(225,225,225);
+            box-shadow: #000 1px 0px 8px;
+            border-radius: 20px;
+        }
+
+        .footer{
+
+            margin-bottom: 0;
+        }
+
+        .footer img{
+            height: 23em;
+        }
+        .footer div{
+            background-color: #fff;
+            /* height: 15em; */
+        }
+        .font-weigth{
+            font-weight: 400;
+        }
+        .termo{
+            background: #e7eaf6;
+            color: black;
+            padding: 0 4px;
+            border-radius: 6px;
+        }
+        .contain{
+            display:flex;
+            align-items: flex-start;
+            justify-content:center;
+        }
+        .btn-color{
+            width: 10rem;
+            height: 4rem;
+            border-radius:15px;
+            background-color:#000050;
+            color:white;
+            transition: 0.5s ;
+        }
+        .btn-color:hover { background: #000098; }
+
+        .carregando{
+            color:#ff0000;
+            display:  none;
+        }
+
+        .carregando_2{
+            color:#ff0000;
+            display:  none;
+        }
+       
+        
+
+    </style>
+</head>
+<body>
+<main>
+<div class=" container-fluid position-relative container-responsive ">
+     <div class="contain">
+     
+                    <form method="POST" id="form" action="inscricoes/cadastrar/teste_inserir.php" enctype="multipart/form-data">
+                        <div class="modal-body ">
+                            
+                            
+                            <section class="container p-4 p-lg-5 ">
+                                <div class="container  bg-bg bg-form">
+                                    
+                                    <div class="row mt-5 justify-content-around">
+                                    <p class="text-center"><strong>Cadastro do(a) Aluno(a)</strong></p>
+
+                                <div class="form-group  col-sm-12 col-md-5 ">
+                                  <label>Nome</label>
+                                  <input type="text" class="form-control form-control-sm" name="nome_aluno" placeholder="Nome completo" required="required">
+                              </div>
+
+
+                                <div class="form-group col-sm-12 col-md-5 ">
+                                  <label>Nome Social (se houver):</label>
+                                  <input type="text" class="form-control form-control-sm" name="nome_social" placeholder="Nome Social" >
+                              </div>
+
+                              <!-- <div class="form-group col-sm-12 col-md-4 mt-2">
+                                  <label>Cor:</label>
+                                  <input type="text" class="form-control form-control-sm" id="cor" name="cor" placeholder="Cor">
+                                </div> -->
+                                <div class="form-group col-sm-12 col-md-3 mt-3">
+                                    <label for="exampleInputEmail1"> Data de Nascimento:</label>
+                                    
+                                    <input type="date" class="form-control form-select form-control-sm" name="dt_nasc" placeholder="Data de Nascimento" onblur="calcularIdade(this.value)
+
+                                    
+                                    if( calcularIdade(this.value) >= 18 ) {
+                                            let nome_res =  document.getElementById('nome_resp').style.display='none';
+                                            console.log('maior deIdade');
+                                        } else{
+                                        let nome_res =  document.getElementById('nome_resp').style.display='block';
+                                        console.log('Menor de Idade');
+                                    };
+                                    " required="required">
+                                </div>
+                                    <script>
+                                        let nome_res =  document.getElementById('nome_resp').style.display='none';
+                                    </script>
+                                
+                                <div id="nome_resp" class="form-group col-sm-12 col-md-7 mt-3">
+                                  <label>Nome do Responsável:</label>
+                                  <input type="text" class="form-control form-control-sm" name="nome_responsavel" placeholder="Nome completo" required="required">
+                              </div>
+
+                              <div class="form-group col-sm-12 col-md-4 mt-3">
+                                  <label >Genero:</label>
+                                  <select  class="form-control form-select form-control-sm" name="genero" id="">
+                                    <option value="">Escolha</option>
+                                    <option value="Heterossexual">Heterossexual</option>
+                                    <option value="Homossexual">Homossexual</option>
+                                    <option value="Bissexual">Bissexual</option>
+                                    <option value="Pansexual">Pansexual</option>
+                                    <option value="Assexual">Assexual</option>
+                                    <option value="Prefiro Não Declarar">Prefiro Não Declarar</option>
+                                  </select>
+                              </div>
+                                <div class="col-sm-12 col-md-6  mt-3" align="center">
+                                        Sexo:
+                                        <br>
+                                        <small class="text-muted">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="sexo" value="MASCULINO" checked>
+                                                <label class="form-check-label color-radio">MASCULINO</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="sexo" value="FEMININO">
+                                                <label class="form-check-label color-radio" for="inlineCheckbox2">FEMININO</label>
+                                            </div>
+                                        </small>
+                                    </div>		
+                          </div>
+
+                          <div class="row mt-2 justify-content-around">	
+                           
+
+
+
+                        <div class="form-group col-sm-12 col-md-6 mt-3">
+                            <label>E-Mail:</label>
+                            <input type="text" class="form-control form-control-sm" name="email" placeholder="E-Mail" required="required">
+                        </div>
+                <!-- </div>
+
+              <div class="row "> -->
+                  <div class="form-group col-sm-12 col-md-4 mt-3">
+                      <label>Nº telefone:</label>
+                      <input type="text" class="form-control form-control-sm" id="telefone" name="telefone" maxlength="20" placeholder="Telefone com DDD" required="required">
+                  </div>
+                  
+                  <div class="form-group col-sm-12 col-md-4 mt-3">
+                      <label>Nº Celular:</label>
+                      <input type="text" class="form-control form-control-sm" id="celular" name="celular" maxlength="20" placeholder="Celular com DDD" required="required">
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-6 mt-3 " align="center">
+                         <label >Possui WhatsApp?</label>
+                         <br>
+     
+                         <small class="text-muted">
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input" type="radio" name="whatsapp" value="SIM" checked>
+                                 <label class="form-check-label color-radio">SIM</label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input " type="radio" name="whatsapp" value="NÃO">
+                                 <label class="form-check-label color-radio" for="inlineCheckbox2">NÃO</label>
+                             </div>
+                         </small>
+                    <input name="status_teste" type="hidden" value="teste">
+                         
+                     </div>
+      </div>
+
+      <div>
+
+       <div class="row  mt-1 justify-content-around">
+
+          <div class="col-sm-12 col-md-2 mt-3">
+             <div class="form-group">
+                <label>CEP: </label>
+                <input name="cep" type="text" id="cep" value="" class="form-control form-control-sm"  placeholder="Digite o CEP" size="10" maxlength="9" onblur="pesquisacep(this.value);" required="required"/>
+            </div> 
+        </div>
+
+        <div class="col-sm-12 col-md-6 mt-3">
+         <div class="form-group">   
+            <label>Endereço</label>
+            <input  type="text" id="rua" name="endereco" class="form-control form-control-sm" size="60" placeholder="Endereço" />
+        </div>  
+        </div>
+        
+        <div class="col-sm-12 col-md-1 mt-3">
+         <div class="form-group">   
+            <label>Número:</label>
+            <input  type="text" id="numero" name="numero" class="form-control form-control-sm" size="60" placeholder="Número"/>
+        </div>  
+        </div>
+    </div>
+
+    <div class="row justify-content-around">
+      <div class="col-sm-12 col-md-5 mt-3">
+         <div class="form-group">         
+            <label>Bairro:</label>
+            <input name="bairro" type="text" id="bairro" class="form-control form-control-sm" size="40" placeholder="Bairro"/>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-5 mt-3">
+        <div class="form-group">        
+            <label>Cidade: </label>
+            <input type="text" id="cidade" name="cidade" class="form-control form-control-sm" size="40" placeholder="Cidade"/>
+        </div>
+    </div> 
+
+
+    <!-- PESSOAS COM NECESSIDADES ESPECIAIS.... -->
+
+    <div class="col-sm-12 col-md-12">
+        
+        <hr  class="mb-2">
+
+        
+    </div>
+
+    <div class="row justify-content-center text-center mb-2 mt-3">
+
+            <div class="row">
+
+            <div class="col-sm-12 col-md-12">
+                
+                <label>Pessoa com necessidade especial?Ou Pessoa com deficiência?</label>
+                    <div class="col-sm-12 col-md-12">
+                        <small class="text-muted">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="pcd" value="SIM" checked>
+                                    <label class="form-check-label color-radio">SIM</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input " type="radio" name="pcd" value="NÃO">
+                                    <label class="form-check-label color-radio" for="inlineCheckbox2">NÃO</label>
+                                </div>
+                        </small>
+                    </div>
+            </div> 
+            </div> 
+            
+            <div class="row justify-content-around mt-3 ">
+
+            <div class="col-sm-12 col-md-6 mb-3 ">
+                <label>Possui algum do itens?</label>
+                <div name=""class="form-check mb-1"  id="" >
+                    <input class="me-md-2" type="checkbox" name="TDAH" value="TDAH"><label>TDAH</label></input>
+
+                    <input class="me-md-2" type="checkbox" name="Espectro Autista" value="Espectro Autista"><label>Espectro Autista</label></input>
+
+                    <input class="me-md-2" type="checkbox" name="Bronquite" value="Bronquite"><label>Bronquite</label></input>
+
+                    <input class="me-md-2" type="checkbox" name="Asma" value="Asma"><label>Asma</label></input>
+                    
+                    <input class="me-md-2" type="checkbox" name="Surdez" value="Surdez"><label>Surdez</label></input>
+                </div>
+                
+                <div name=""class="form-check"  id="" >
+                    <input class="me-md-2" type="checkbox" name="Síndrome de Down" value="Síndrome de Down"><label>Síndrome de Down</label></input>
+
+                    <input class="me-md-2" type="checkbox" name="Deficiência Auditiva" value="Deficiência Auditiva"><label>Deficiência Auditiva</label></input>
+
+                    <input class="me-md-2" type="checkbox" name="Nenhum" value="Nenhum"><label>Nenhum</label></input>
+                </div>
+                
+                <div>
+                    <label for="">Outro:</label>
+                        <input type="text" class="form-control">
+                </div>
+            </div>
+            </div>
+           
+
+                <div class="col-sm-12 col-md-4 mt-2">
+                    
+                    <label>Possui disfunção ortopédica?</label>
+                        <div class="col-sm-12 col-md-12">
+                    <small class="text-muted">
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input" type="radio" name="pcd" value="SIM" checked>
+                                 <label class="form-check-label color-radio">SIM</label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input " type="radio" name="pcd" value="NÃO">
+                                 <label class="form-check-label color-radio" for="inlineCheckbox2">NÃO</label>
+                             </div>
+                            </small>
+                        </div>
+
+                                    
+                        <label for="">Qual?</label>
+                        <input type="text" class="form-control">
+                </div> 
+            
+
+
+            
+
+                <div class="col-sm-12 col-md-4">
+                    
+                    <label>Possui alguma alergia?</label>
+                        <div class="col-sm-12 col-md-12">
+                    <small class="text-muted">
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input" type="radio" name="pcd" value="SIM" checked>
+                                 <label class="form-check-label color-radio">SIM</label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input " type="radio" name="pcd" value="NÃO">
+                                 <label class="form-check-label color-radio" for="inlineCheckbox2">NÃO</label>
+                             </div>
+                            </small>
+                        </div>
+
+                                    
+                        <label for="">Qual?</label>
+                        <input type="text" class="form-control">
+                </div> 
+            </div> 
+    </div> 
+    
+    <div class="col-sm-12 col-md-12">
+        
+        <hr  class="mb-2">
+
+        
+    </div>
+
+    <!-- Documentos Pessoais -->
+
+    <div class="row justify-content-around text-center">
+        
+        <p class=""><strong>Envie uma imagem dos documentos a seguir</strong></p>
+        
+        <div class="row justify-content-around">
+            <div class="col-sm-12 col-md-5 mt-3">
+                <label><strong>RG:</strong></label>
+                <input type="file" class="form-control" name="id_rg" id="id_rg">
+            </div>
+        </div>
+
+        <div class="row justify-content-around">
+            <div class="col-sm-12 col-md-5 mt-3">
+                <label><strong>Comprovante de Residência:</strong></label>
+                <input type="file" class="form-control" name="id_comp_res" id="id_comp_res">
+            </div>
+        </div>
+            
+            <div class="row justify-content-around mb-3 ">
+                <div class="col-sm-12 col-md-5 mt-3">
+                    <label><strong>Carteirinha de Covid-19:</strong></label>
+                    <input type="file" class="form-control" name="id_cart_covid_19" id="id_cart_covid_19">
+                </div>
+            </div> 
+            
+            
+    </div> 
+
+
+    <div class="col-sm-12 col-md-12">
+        
+        <hr  class="mb-2">
+
+        
+    </div>
+
+    <div class="row justify-content-around text-center">
+
+        <p class=""><strong>Seleção de Turma e Horário</strong></p>
+
+            <div class="col-sm-12 col-md-3 mt-3">
+                
+                <label>Categoria:</label>
+                <select class="form-select" name="id_categoria" id="id_categoria">
+                    <option value="">Escolha a Categoria</option>
+                    <?php
+            $consulta1 = $pdo->query("SELECT * FROM categorias   ORDER BY nome_categoria ASC");
+            $resultado1 = $consulta1->fetchAll(PDO::FETCH_ASSOC);
+            $total_registro1 = count($resultado1);
+
+            foreach($resultado1 as $option) {
+                ?>
+                    <option value="<?php echo $option['id']?>"><?php echo ($option['nome_categoria'])?></option>
+                <?php
+            }
+            ?>
+            
+                </select><br><br>
+            </div>
+            <div class="col-sm-12 col-md-3 mt-3">
+
+                <label>Subcategoria:</label>
+                <span class="carregando">Selecione a Categoria e aguarde...</span>
+                <select class="form-select" name="id_sub_categoria" id="id_sub_categoria">
+                    <option value="">Escolha a Subcategoria</option>
+                </select><br><br>
+
+            </div>
+            <div class="col-sm-12 col-md-3 mt-3">
+
+
+                <label>Turma:</label>
+                <span  class="carregando_2">Selecione a Subategoria e aguarde...</span>
+                <select class="form-select" name="id_turma" id="id_turma">
+                    <option value="">Escolha a Turma</option>
+                </select><br><br>
+            </div> 
+    </div> 
+
+       <!-- UNIFORMES -->
+
+       <div class="col-sm-12 col-md-12">
+        
+        <hr  class="mb-2">
+
+        
+    </div>
+
+    <div class="row justify-content-center text-center mb-2 mt-3">
+
+
+        <p class=""><strong>Tamanho do Uniforme</strong></p>
+
+                    <div class="row col-sm-12 col-md-4">
+                        <label>Colant:</label><br><br>
+                        <select class="form-select" name="" id="">
+                    <option value="">Escolha o tamanho</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="36">36</option>
+                    <option value="38">38</option>
+                    <option value="40">40</option>
+                    <option value="42">42</option>
+                    <option value="44">44</option>
+                    <option value="46">46</option>
+                    <option value="48">48</option>
+                    <option value="50">50</option>
+                </select>
+            </div> 
+    </div> 
+
+
+    <div class="row justify-content-center text-center mb-2 mt-3">
+
+
+
+            <div class="row col-sm-12 col-md-4">
+                        <label>Shorts:</label>
+                         <small class="text-muted">
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input" type="radio" name="tamanho_shorts_1" value="Infantil" checked>
+                                 <label class="form-check-label color-radio">Infantil</label>
+                             </div>
+                             <div class="form-check form-check-inline">
+                                 <input class="form-check-input " type="radio" name="tamanho_shorts_1" value="Adulto">
+                                 <label class="form-check-label color-radio" for="inlineCheckbox2">Adulto</label>
+                             </div>
+                         </small>
+
+                <select class="form-select" name="" id="">
+                    <option value="">Escolha o tamanho</option>
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+
+            </div> 
+                        
+    </div> 
+    
+    <div class="row justify-content-center text-center mb-2 mt-3">
+        
+        
+        <div class="row col-sm-12 col-md-4">
+                <label>Camiseta:</label>
+                <small class="text-muted">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="tamanho_camiseta_1" value="Infantil" checked>
+                            <label class="form-check-label color-radio">Infantil</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input " type="radio" name="tamanho_camiseta_1" value="Adulto">
+                            <label class="form-check-label color-radio" for="inlineCheckbox2">Adulto</label>
+                        </div>
+                </small>
+
+                <select class="form-select" name="" id="">
+                    <option value="">Escolha o tamanho</option>
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+                         
+                        </div> 
+    </div> 
+            
+                        
+                        
+                        
+                        
+                        <div class="col-sm-12 col-md-12">
+        
+        <hr  class="mb-2">
+
+        
+    </div>
+
+
+
+
+
+    <!-- FINALIZAR CADASTRO -->
+
+       <div class="col-sm-12  mt-3">
+                        <p><b>ATENÇÃO</b>: Leia o termo de responsabilidade clicando no <span class="font-weigth bg-dark text-light p-1">botão abaixo</span> logo abaixo:</p>
+                        <!-- Botão para acionar modal -->
+                        <button type="button" class="termo btn-primary font-weigth bg-dark text-light" data-bs-toggle="modal" data-bs-target="#modalExemplo">
+                            Abrir o termo de responsabilidade <i class="bi bi-box-arrow-up-right"></i>
+    </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Termo de Aceite de Informações</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    Declaro que as informações apresentadas nesta inscrição são verdadeiras e de minha responsabilidade. Estou ciente da responsabilidade em manter os dados deste cadastro sempre atualizados. Autorizo a utilização de imagens para fins de divulgações das ações da Secretaria de Cultura e Turismo de Taboão da Serra.
+                                       
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceito</button>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" name="termo" value="Concordo" required="required">
+                            <label class="form-check-label" for="exampleCheck1" value="Concordo">Li, concordo e aceito os termos</label>
+                        </div>
+                        <hr class="mt-4">
+
+                    </div>
+    </div>
+                    
+                    <div class="d-flex justify-content-center mt-4" >
+                        <button type="submit" id="btn-cadastrar" class=" btn-color">Cadastrar</button>
+                    </div>
+                </div>
+
+              
+            </form>
+       
+            </div>
+        </div>
+</section>
+</main>
+</div> 
+</body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="../vendor/js/mascaras.js"></script>
+            
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		
+        <script type="text/javascript">
+		  google.load("jquery", "1.4.2");
+		</script>
+<?php
+    require_once('pesquisar.php');
+?>
+
+</html>
